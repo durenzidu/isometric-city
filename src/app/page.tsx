@@ -484,7 +484,7 @@ export default function HomePage() {
             className="mb-3 flex-shrink-0"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-circle.png" alt="PowPow" className="h-20 w-20 mx-auto" />
+            <img src="/logo-powpow.svg" alt="PowPow" className="h-12 w-auto mx-auto" />
           </a>
           <h1 className="font-title-display text-5xl sm:text-6xl text-gray-900 mb-4 sm:mb-6 flex-shrink-0">
             <T>PowPow City</T>
@@ -620,7 +620,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-circle.png" alt="PowPow" className="h-24 w-24" />
+                <img src="/logo-powpow.svg" alt="PowPow" className="h-16 w-auto" />
               </a>
               <h1 className="font-title-display text-7xl 2xl:text-8xl text-gray-900">
                 <T>PowPow City</T>
