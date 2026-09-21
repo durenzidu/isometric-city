@@ -340,7 +340,7 @@ export default function Game({ onExit }: { onExit?: () => void }) {
         <Sidebar onExit={onExit} />
         
         <div className="flex-1 flex flex-col ml-56">
-          <TopBar />
+          <TopBar onInvite={multiplayer ? () => setShowShareModal(true) : undefined} />
           <StatsPanel />
           <div className="flex-1 relative overflow-visible">
             <CanvasIsometricGrid 
@@ -400,7 +400,15 @@ export default function Game({ onExit }: { onExit?: () => void }) {
         
         <VinnieDialog open={showVinnieDialog} onOpenChange={setShowVinnieDialog} />
         <CommandMenu />
-        
+
+        {/* Share Modal for desktop co-op invite */}
+        {multiplayer && (
+          <ShareModal
+            open={showShareModal}
+            onOpenChange={setShowShareModal}
+          />
+        )}
+
         {/* Tip Toast for helping new players */}
         <TipToast
           message={currentTip || ''}

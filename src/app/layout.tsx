@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, DM_Sans } from 'next/font/google';
+import { Playfair_Display, DM_Sans, ZCOOL_QingKe_HuangYou } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { getLocale } from "gt-next/server";
@@ -17,6 +17,15 @@ const dmSans = DM_Sans({
   variable: '--font-sans',
   display: 'swap',
   weight: ['400', '500', '600', '700']
+});
+
+// Chinese display font for the landing page title (self-hosted at build time)
+const zcoolTitle = ZCOOL_QingKe_HuangYou({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-title',
+  display: 'swap',
+  preload: false
 });
 
 export const metadata: Metadata = {
@@ -66,7 +75,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: {children: React.ReactNode;}) {
   return (
-  <html className={`dark ${playfair.variable} ${dmSans.variable}`} lang={await getLocale()}>
+  <html className={`dark ${playfair.variable} ${dmSans.variable} ${zcoolTitle.variable}`} lang={await getLocale()}>
       <head>
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

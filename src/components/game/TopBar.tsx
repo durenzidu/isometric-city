@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/Icons';
 import { copyShareUrl } from '@/lib/shareState';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
+import { Users } from 'lucide-react';
 
 // Translatable UI labels
 const UI_LABELS = {
@@ -171,7 +172,7 @@ export const StatsPanel = React.memo(function StatsPanel() {
 // TOP BAR
 // ============================================================================
 
-export const TopBar = React.memo(function TopBar() {
+export const TopBar = React.memo(function TopBar({ onInvite }: { onInvite?: () => void }) {
   const { state, setSpeed, setTaxRate, visualHour } = useGame();
   const { stats, year, month, day, speed, taxRate, cityName } = state;
   const m = useMessages();
@@ -268,6 +269,21 @@ export const TopBar = React.memo(function TopBar() {
         </div>
         
         <Separator orientation="vertical" className="h-8" />
+
+        {onInvite && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-1.5 text-primary hover:text-primary"
+            onClick={onInvite}
+            title="Invite Friends"
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span className="hidden xl:inline">
+              <T>Invite Friends</T>
+            </span>
+          </Button>
+        )}
 
         <Button asChild variant="ghost" size="sm" className="gap-1.5">
           <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">

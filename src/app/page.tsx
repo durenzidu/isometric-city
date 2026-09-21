@@ -232,8 +232,8 @@ function SpriteGallery({ count = 16, cols = 4, cellSize = 120 }: { count?: numbe
       const cellY = row * cellSize;
       
       // Draw cell background
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.roundRect(cellX + 2, cellY + 2, cellSize - 4, cellSize - 4, 4);
@@ -280,22 +280,22 @@ function SavedCityCard({ city, onLoad, onDelete }: { city: SavedCityMeta; onLoad
     <div className="relative group">
       <button
         onClick={onLoad}
-        className="w-full text-left p-3 pr-8 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-none transition-all duration-200"
+        className="w-full text-left p-3 pr-8 bg-black/[0.03] hover:bg-black/[0.06] border border-black/10 hover:border-black/20 rounded-none transition-all duration-200"
       >
         <div className="flex items-center gap-2">
-          <h3 className="text-white font-medium truncate group-hover:text-white/90 text-sm flex-1">
+          <h3 className="text-gray-900 font-medium truncate group-hover:text-black text-sm flex-1">
             {city.cityName}
           </h3>
           {city.roomCode && (
-            <span className="text-xs px-1.5 py-0.5 bg-blue-500/20 text-blue-300 rounded shrink-0">
+            <span className="text-xs px-1.5 py-0.5 bg-blue-500/10 text-blue-600 rounded shrink-0">
               Co-op
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3 mt-1 text-xs text-white/50">
+        <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
           <span>Pop: {city.population.toLocaleString()}</span>
           <span>${city.money.toLocaleString()}</span>
-          {city.roomCode && <span className="text-blue-400/60">{city.roomCode}</span>}
+          {city.roomCode && <span className="text-blue-500/80">{city.roomCode}</span>}
         </div>
       </button>
       {onDelete && (
@@ -304,7 +304,7 @@ function SavedCityCard({ city, onLoad, onDelete }: { city: SavedCityMeta; onLoad
             e.stopPropagation();
             onDelete();
           }}
-          className="absolute top-1/2 -translate-y-1/2 right-1.5 p-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-500/20 text-white/40 hover:text-red-400 rounded transition-all duration-200"
+          className="absolute top-1/2 -translate-y-1/2 right-1.5 p-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-500/10 text-gray-400 hover:text-red-500 rounded transition-all duration-200"
           title="Delete city"
         >
           <X className="w-3.5 h-3.5" />
@@ -445,8 +445,8 @@ export default function HomePage() {
 
   if (isChecking) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
-        <div className="text-white/60"><T>Loading...</T></div>
+      <main className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-500"><T>Loading...</T></div>
       </main>
     );
   }
@@ -472,11 +472,11 @@ export default function HomePage() {
   if (isMobile) {
     return (
       <MultiplayerContextProvider>
-        <main className="h-[100dvh] max-h-[100dvh] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col items-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto">
+        <main className="h-[100dvh] max-h-[100dvh] bg-white flex flex-col items-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto">
           {/* Spacer to push content down slightly from top */}
           <div className="flex-shrink-0 h-4 sm:h-8" />
           
-          {/* Title - smaller on very small screens */}
+          {/* Logo - stacked above the title */}
           <a
             href="https://global.powpow.online"
             target="_blank"
@@ -484,9 +484,9 @@ export default function HomePage() {
             className="mb-3 flex-shrink-0"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-powpow.svg" alt="PowPow" className="h-12 w-auto mx-auto" />
+            <img src="/logo-circle.png" alt="PowPow" className="h-20 w-20 mx-auto" />
           </a>
-          <h1 className="text-4xl sm:text-5xl font-light tracking-wider text-white/90 mb-4 sm:mb-6 flex-shrink-0">
+          <h1 className="font-title-display text-5xl sm:text-6xl text-gray-900 mb-4 sm:mb-6 flex-shrink-0">
             <T>PowPow City</T>
           </h1>
           
@@ -499,7 +499,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-2 sm:gap-3 w-full max-w-xs flex-shrink-0">
             <Button 
               onClick={() => setShowGame(true)}
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-none transition-all duration-300"
+              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
             >
               {hasSaved ? <T>Continue</T> : <T>New Game</T>}
             </Button>
@@ -507,7 +507,7 @@ export default function HomePage() {
             <Button
               onClick={() => setShowCoopModal(true)}
               variant="outline"
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-white/5 hover:bg-white/15 text-white/60 hover:text-white border border-white/15 rounded-none transition-all duration-300"
+              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
             >
               <T>Co-op</T>
             </Button>
@@ -530,17 +530,28 @@ export default function HomePage() {
                 setShowGame(true);
               }}
               variant="outline"
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-white/10 text-white/40 hover:text-white/60 border border-white/10 rounded-none transition-all duration-300"
+              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
             >
               <T>Load Example</T>
             </Button>
+
+            <Button
+              asChild
+              variant="outline"
+              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
+            >
+              <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
+                <T>Back to PowPow</T>
+              </a>
+            </Button>
+
             <div className="flex items-start justify-between w-full">
               <div className="flex flex-col">
                 <a
                   href="https://global.powpow.online"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
+                  className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
                 >
                   PowPow
                 </a>
@@ -548,19 +559,19 @@ export default function HomePage() {
                   href="https://github.com/amilich/isometric-city"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
+                  className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
                 >
                   Powered by IsoCity
                 </a>
               </div>
-              <LanguageSelector variant="ghost" className="text-white/40 hover:text-white/70 hover:bg-white/10" />
+              <LanguageSelector variant="ghost" className="text-gray-400 hover:text-gray-700 hover:bg-black/5" />
             </div>
           </div>
           
           {/* Saved Cities - scrollable area takes remaining space */}
           {savedCities.length > 0 && (
             <div className="w-full max-w-xs mt-3 sm:mt-4 flex-1 min-h-0 flex flex-col">
-              <h2 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-2 flex-shrink-0">
+              <h2 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 flex-shrink-0">
                 <T>Saved Cities</T>
               </h2>
               <div 
@@ -597,35 +608,35 @@ export default function HomePage() {
   // Desktop landing page
   return (
     <MultiplayerContextProvider>
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-8">
+      <main className="min-h-screen bg-white flex items-center justify-center p-8">
         <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-16 items-center">
           
           {/* Left - Title and Start Button */}
           <div className="flex flex-col items-center lg:items-start justify-center space-y-12">
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col items-center lg:items-start gap-4">
               <a
                 href="https://global.powpow.online"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-powpow.svg" alt="PowPow" className="h-16 w-auto" />
+                <img src="/logo-circle.png" alt="PowPow" className="h-24 w-24" />
               </a>
-              <h1 className="text-7xl 2xl:text-8xl font-light tracking-wider text-white/90">
+              <h1 className="font-title-display text-7xl 2xl:text-8xl text-gray-900">
                 <T>PowPow City</T>
               </h1>
             </div>
             <div className="flex flex-col gap-3">
               <Button 
                 onClick={() => setShowGame(true)}
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-none transition-all duration-300"
+                className="w-64 py-8 text-2xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
               >
                 {hasSaved ? <T>Continue</T> : <T>New Game</T>}
               </Button>
               <Button
                 onClick={() => setShowCoopModal(true)}
                 variant="outline"
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-white/5 hover:bg-white/15 text-white/60 hover:text-white border border-white/15 rounded-none transition-all duration-300"
+                className="w-64 py-8 text-2xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
               >
                 <T>Co-op</T>
               </Button>
@@ -647,9 +658,18 @@ export default function HomePage() {
                   setShowGame(true);
                 }}
                 variant="outline"
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-white/10 text-white/40 hover:text-white/60 border border-white/10 rounded-none transition-all duration-300"
+                className="w-64 py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
               >
                 <T>Load Example</T>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="w-64 py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
+              >
+                <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
+                  <T>Back to PowPow</T>
+                </a>
               </Button>
               <div className="flex items-start justify-between w-64">
                 <div className="flex flex-col">
@@ -657,7 +677,7 @@ export default function HomePage() {
                     href="https://global.powpow.online"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
+                    className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
                   >
                     PowPow
                   </a>
@@ -665,19 +685,19 @@ export default function HomePage() {
                     href="https://github.com/amilich/isometric-city"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
+                    className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
                   >
                     Powered by IsoCity
                   </a>
                 </div>
-                <LanguageSelector variant="ghost" className="text-white/40 hover:text-white/70 hover:bg-white/10" />
+                <LanguageSelector variant="ghost" className="text-gray-400 hover:text-gray-700 hover:bg-black/5" />
               </div>
             </div>
             
             {/* Saved Cities */}
             {savedCities.length > 0 && (
               <div className="w-64">
-                <h2 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-2">
+                <h2 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
                   <T>Saved Cities</T>
                 </h2>
                 <div 

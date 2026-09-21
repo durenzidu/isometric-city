@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Chinese display font for the landing page title (ZCOOL QingKe HuangYou) */
+.font-title-display {
+  font-family: var(--font-title), 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
 /* Safe area insets for mobile devices */
 :root {
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
