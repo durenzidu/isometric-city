@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { SpriteTestPanel } from './SpriteTestPanel';
 import { SavedCityMeta } from '@/types/game';
-import { LocaleSelector } from 'gt-next';
+import { useLocaleSelector } from 'gt-next/client';
 
 // Translatable UI labels
 const UI_LABELS = {
@@ -131,6 +131,7 @@ export function SettingsPanel() {
   const { state, setActivePanel, setDisastersEnabled, newGame, loadState, exportState, expandCity, shrinkCity, currentSpritePack, availableSpritePacks, setSpritePack, dayNightMode, setDayNightMode, getSavedCityInfo, restoreSavedCity, clearSavedCity, savedCities, saveCity, loadSavedCity, deleteSavedCity, renameSavedCity } = useGame();
   const { disastersEnabled, cityName, gridSize, id: currentCityId } = state;
   const m = useMessages();
+  const { locale, locales, setLocale, getLocaleProperties } = useLocaleSelector();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [newCityName, setNewCityName] = useState(cityName);
@@ -272,10 +273,34 @@ export function SettingsPanel() {
             <div className="py-2">
               <Label>{m(UI_LABELS.language)}</Label>
               <p className="text-muted-foreground text-xs mb-2">{m(UI_LABELS.languageDesc)}</p>
-              <LocaleSelector
+              <select
+                value={locale || ''}
+                onChange={(e) => setLocale(e.target.value)}
                 className="w-full bg-input text-foreground border border-border rounded-md px-3 py-2 text-sm cursor-pointer"
-                style={{ colorScheme: 'dark' }}
-              />
+                style={{
+                  colorScheme: 'dark',
+                  backgroundColor: 'hsl(var(--input))',
+                  color: 'hsl(var(--foreground))',
+                }}
+              >
+                {!locale && <option value="" style={{ backgroundColor: 'hsl(var(--input))', color: 'hsl(var(--foreground))' }} />}
+                {(locales || []).map((code) => {
+                  const nativeName = getLocaleProperties(code).nativeNameWithRegionCode;
+                  const label = nativeName
+                    ? nativeName.charAt(0).toUpperCase() + nativeName.slice(1)
+                    : code;
+                  return (
+                    <option
+                      key={code}
+                      value={code}
+                      suppressHydrationWarning
+                      style={{ backgroundColor: 'hsl(var(--input))', color: 'hsl(var(--foreground))' }}
+                    >
+                      {label}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
           </div>
 
