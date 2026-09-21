@@ -477,8 +477,17 @@ export default function HomePage() {
           <div className="flex-shrink-0 h-4 sm:h-8" />
           
           {/* Title - smaller on very small screens */}
+          <a
+            href="https://global.powpow.online"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-3 flex-shrink-0"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-powpow.svg" alt="PowPow" className="h-12 w-auto mx-auto" />
+          </a>
           <h1 className="text-4xl sm:text-5xl font-light tracking-wider text-white/90 mb-4 sm:mb-6 flex-shrink-0">
-            IsoCity
+            <T>PowPow City</T>
           </h1>
           
           {/* Sprite Gallery - smaller on mobile, contained */}
@@ -528,12 +537,12 @@ export default function HomePage() {
             <div className="flex items-start justify-between w-full">
               <div className="flex flex-col">
                 <a
-                  href="https://cursor.com"
+                  href="https://global.powpow.online"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
                 >
-                  <T>Made with Cursor</T>
+                  PowPow
                 </a>
                 <a
                   href="https://github.com/amilich/isometric-city"
@@ -541,7 +550,7 @@ export default function HomePage() {
                   rel="noopener noreferrer"
                   className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
                 >
-                  <T>Open GitHub</T>
+                  Powered by IsoCity
                 </a>
               </div>
               <LanguageSelector variant="ghost" className="text-white/40 hover:text-white/70 hover:bg-white/10" />
@@ -593,9 +602,19 @@ export default function HomePage() {
           
           {/* Left - Title and Start Button */}
           <div className="flex flex-col items-center lg:items-start justify-center space-y-12">
-            <h1 className="text-8xl font-light tracking-wider text-white/90">
-              IsoCity
-            </h1>
+            <div className="flex items-center gap-6">
+              <a
+                href="https://global.powpow.online"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo-powpow.svg" alt="PowPow" className="h-16 w-auto" />
+              </a>
+              <h1 className="text-7xl 2xl:text-8xl font-light tracking-wider text-white/90">
+                <T>PowPow City</T>
+              </h1>
+            </div>
             <div className="flex flex-col gap-3">
               <Button 
                 onClick={() => setShowGame(true)}
@@ -635,12 +654,12 @@ export default function HomePage() {
               <div className="flex items-start justify-between w-64">
                 <div className="flex flex-col">
                   <a
-                    href="https://cursor.com"
+                    href="https://global.powpow.online"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
                   >
-                    <T>Made with Cursor</T>
+                    PowPow
                   </a>
                   <a
                     href="https://github.com/amilich/isometric-city"
@@ -648,7 +667,7 @@ export default function HomePage() {
                     rel="noopener noreferrer"
                     className="text-left py-2 text-sm font-light tracking-wide text-white/40 hover:text-white/70 transition-colors duration-200"
                   >
-                    <T>Open GitHub</T>
+                    Powered by IsoCity
                   </a>
                 </div>
                 <LanguageSelector variant="ghost" className="text-white/40 hover:text-white/70 hover:bg-white/10" />

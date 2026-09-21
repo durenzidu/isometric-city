@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useGame } from '@/context/GameContext';
+import { T } from 'gt-next';
 
 interface VinnieDialogProps {
   open: boolean;
@@ -24,7 +25,7 @@ export function VinnieDialog({ open, onOpenChange }: VinnieDialogProps) {
     addMoney(500000);
     addNotification(
       'Questionable Finances',
-      'You received $500,000 from Cousin Vinnie. Your accountants are... concerned.',
+      'You received $500,000 from a mysterious bubble. Your accountants are... concerned.',
       'disaster'
     );
     onOpenChange(false);
@@ -34,7 +35,7 @@ export function VinnieDialog({ open, onOpenChange }: VinnieDialogProps) {
     addMoney(10000);
     addNotification(
       'Integrity Bonus',
-      'You declined Vinnie\'s offer. A mysterious benefactor rewards your honesty with $10,000.',
+      'You declined the offer of the mysterious bubble. A secret benefactor rewards your honesty with $10,000.',
       'trophy'
     );
     onOpenChange(false);
@@ -44,17 +45,19 @@ export function VinnieDialog({ open, onOpenChange }: VinnieDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-slate-900 border-slate-700 text-slate-100">
         <DialogHeader>
-          <DialogTitle className="text-sky-400">A Shady Offer</DialogTitle>
+          <DialogTitle className="text-red-400"><T>A Shady Offer</T></DialogTitle>
           <DialogDescription asChild>
             <div className="text-slate-300 pt-2">
               <p className="mb-2">
-                Hey there, Mayor... My associate Vinnie heard you could use some help with the city budget.
+                <T>Hey there, Mayor... A mysterious bubble heard you could use some help with the city budget.</T>
               </p>
               <p className="mb-2">
-                He&apos;s offering <span className="text-green-400 font-semibold">$500,000</span>... no strings attached.
+                <T>The mysterious bubble is offering</T>{' '}
+                <span className="text-green-400 font-semibold">$500,000</span>{' '}
+                <T>as a starter gift — no strings attached.</T>
               </p>
               <p className="text-slate-400 italic">
-                Well, maybe a few strings.
+                <T>Well, maybe a few strings.</T>
               </p>
             </div>
           </DialogDescription>
@@ -65,20 +68,16 @@ export function VinnieDialog({ open, onOpenChange }: VinnieDialogProps) {
             onClick={handleDecline}
             className="border-slate-600 text-slate-200 hover:bg-slate-800"
           >
-            Decline
+            <T>Decline</T>
           </Button>
           <Button
             onClick={handleAccept}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            Accept Offer
+            <T>Accept Offer</T>
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
-
-
-
-

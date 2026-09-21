@@ -221,9 +221,30 @@ export function MobileTopBar({
               </button>
             </div>
 
-            {/* Language selector, Share, and Exit button group */}
+            {/* Language selector, Back to PowPow, Share, and Exit button group */}
             <div className="flex items-center -space-x-0.5">
               <LanguageSelector useDrawer iconSize={12} />
+
+              <a
+                href="https://global.powpow.online/campaign"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-6 w-4 p-0 m-0 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                title="返回泡泡"
+              >
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              </a>
 
               {onShare && (
                 <button

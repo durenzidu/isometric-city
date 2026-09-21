@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { msg, useMessages } from 'gt-next';
+import { msg, useMessages, T } from 'gt-next';
 import { useGame } from '@/context/GameContext';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -268,7 +268,13 @@ export const TopBar = React.memo(function TopBar() {
         </div>
         
         <Separator orientation="vertical" className="h-8" />
-        
+
+        <Button asChild variant="ghost" size="sm" className="gap-1.5">
+          <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
+            <T>Back to PowPow</T>
+          </a>
+        </Button>
+
         <LanguageSelector iconOnly={false} variant="ghost" iconSize={14} />
       </div>
     </div>

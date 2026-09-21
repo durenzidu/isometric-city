@@ -20,24 +20,24 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://iso-city.com'),
+  metadataBase: new URL('https://powpowcity.powpow.online'),
   title: {
-    default: 'ISOCITY — Metropolis Builder',
-    template: 'ISOCITY — %s',
+    default: '泡泡城市 — PowPow 城市建造',
+    template: '%s — 泡泡城市',
   },
-  description: 'A richly detailed isometric city builder. Build your metropolis and manage resources with cars, planes, helicopters, boats, trains, citizens, and more.',
+  description: '泡泡城市：PowPow 出品的等距视角城市建造游戏。规划住宅、商业与工业区，铺设道路、电网与水管，看你的大都市拔地而起。A richly detailed isometric city builder by PowPow.',
   openGraph: {
-    title: 'ISOCITY — Metropolis Builder',
-    description: 'A richly detailed isometric city builder. Build your metropolis and manage resources with cars, planes, helicopters, boats, trains, citizens, and more.',
+    title: '泡泡城市 — PowPow 城市建造',
+    description: '规划区域、铺设道路与水电，建造属于你的大都市。A richly detailed isometric city builder by PowPow.',
     type: 'website',
-    siteName: 'IsoCity',
+    siteName: '泡泡城市',
     images: [
       {
         url: '/opengraph-image.png',
-        width: 1179,
-        height: 1406,
+        width: 1200,
+        height: 630,
         type: 'image/png',
-        alt: 'ISOCITY - Isometric city builder game screenshot'
+        alt: '泡泡城市 - PowPow 等距视角城市建造游戏'
       }
     ],
   },
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'IsoCity'
+    title: '泡泡城市'
   },
   formatDetection: {
     telephone: false
@@ -69,7 +69,7 @@ export default async function RootLayout({ children }: {children: React.ReactNod
   <html className={`dark ${playfair.variable} ${dmSans.variable}`} lang={await getLocale()}>
       <head>
         <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="apple-touch-icon" href="/assets/buildings/residential.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         {/* Preload critical game assets - WebP for browsers that support it */}
         <link
         rel="preload"
