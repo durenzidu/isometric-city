@@ -272,7 +272,10 @@ export function SettingsPanel() {
             <div className="py-2">
               <Label>{m(UI_LABELS.language)}</Label>
               <p className="text-muted-foreground text-xs mb-2">{m(UI_LABELS.languageDesc)}</p>
-              <LocaleSelector />
+              <LocaleSelector
+                className="w-full bg-input text-foreground border border-border rounded-md px-3 py-2 text-sm cursor-pointer"
+                style={{ colorScheme: 'dark' }}
+              />
             </div>
           </div>
 
