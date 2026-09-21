@@ -1,7 +1,7 @@
 # 泡泡城市（PowPow City）项目交接文档
 
 > 本文档记录「泡泡城市」从 fork 到上线的完整过程、关键技术发现、部署配置与避坑指南，
-> 供下一个游戏/游乐场项目快速复用。最后更新：2026-09-22（commit 对应 R3 完成）。
+> 供下一个游戏/游乐场项目快速复用。最后更新：2026-09-22 晚（语言选择器加固 commit 40539d3 + 游乐场开工准备）。
 
 ---
 
@@ -106,6 +106,16 @@ fs.writeFileSync(zhPath, JSON.stringify(zh, null, 2) + '\n');
 - 添加后必须重新构建（插件把原文编进 bundle），并确认线上 `/_gt/zh.json` 包含新 key。
 - 目前 zh.json 共 345 条。
 
+### 语言选择器「白底白字」修复记录（commit 40539d3，2026-09-22）⭐
+- **现象**：设置面板语言下拉**弹出的选项列表**白底白字（闭合状态正常）。根因：很多浏览器（尤其国内 WebView/旧内核）不认 `color-scheme: dark`，弹层用系统白色背景，而 `<option>` 文字继承了页面的白色。
+- **修复**：弃用 gt-next 自带的 `LocaleSelector`（它内部渲染 `<option>`，无法从外部加样式），改用底层 hook 自绘 `<select>`：
+  ```tsx
+  import { useLocaleSelector } from 'gt-next/client';
+  const { locale, locales, setLocale, getLocaleProperties } = useLocaleSelector();
+  ```
+  给 `<select>` **和每一个 `<option>`** 都写内联样式 `backgroundColor: 'hsl(var(--input))'` + `color: 'hsl(var(--foreground))'`（本项目 CSS 变量是无包装 HSL 三元组格式，`hsl(var(--x))` 写法有效）。语言名用 `getLocaleProperties(code).nativeNameWithRegionCode` 首字母大写，与原组件行为一致。
+- **坑**：`useLocaleSelector` 必须从 `'gt-next/client'` 导入——主入口 `'gt-next'` 的类型声明（index.types.d.ts）**没有**这个导出，但运行时有，从主入口 import 会 TypeScript 编译报错。
+
 ---
 
 ## 5. 构建与部署
@@ -147,6 +157,7 @@ npm run build    # = npm run compress-images && next build（sharp 处理图片�
 6. 上游原始代码里桌面端**从来没有**邀请按钮（只有 import），别误以为是被删的。
 7. 修改 `<T>` 文案后：哈希会变 → 旧翻译失效，必须同步更新 zh.json。
 8. 图片生成（PowerShell System.Drawing）可用，但注意中文字体渲染要选对 FontFamily。
+9. 用户报「功能回滚 / 样式丢失」时**先怀疑浏览器缓存**（2026-09-22 虚惊一场：缓存未清导致看到旧版页面，误以为代码被回滚）。核实方法：对比线上 HTML 引用的 chunk 名与最新部署 commit（Vercel API），或 bundle grep 关键字符串，别急着改代码。
 
 ---
 
@@ -154,14 +165,33 @@ npm run build    # = npm run compress-images && next build（sharp 处理图片�
 
 | 优先级 | 事项 |
 |---|---|
-| 中 | 线上双浏览器端到端实测邀请码共建流程（目前只做了产物级验证） |
+| 中 | 线上双浏览器端到端实测邀请码共建流程（目前只做了产物级验证；2026-09-22 用户实测曾误报故障，后确认是浏览器缓存问题，功能本身未复现故障） |
 | 低 | 移动端地址栏 themeColor 仍为深色 `#0f1219`，落地页已是白底（layout.tsx viewport） |
 | 低 | og 分享图仍是暗色风格，与白底落地页不一致，可出白底版 |
 | v2 | game_rooms 过期房间清理；与 PowPow 账号体系互通 |
 
 ---
 
-## 9. 下一个游戏项目的复用建议（Playbook）
+## 9. 明日待办（2026-09-23）：泡泡游乐场（IsoCoaster）⭐
+
+> 用户已确认：下一个定制目标是仓库内的过山车/游乐场子游戏（IsoCoaster）。
+> 代码克隆已备好，明天直接开工，不需要重新 clone。
+
+### 现状（2026-09-22 已验证）
+- **代码完整在库**：`src/app/coaster/`（`page.tsx` 主页、`layout.tsx`、`coop/[roomCode]/page.tsx` 多人房间路由）+ `src/components/coaster/`（18 个组件文件，含 CoasterShareModal）。
+- **本地克隆就绪**：`D:\powpowcity\isometric-city`，已补全为**完整历史**（952 commits，非浅克隆，可任意切分支）；main = `40539d3`，与远端、线上部署完全同步；node_modules 已装好，可直接 `npm run dev` / `npm run build`。
+- **线上目前不可达（关键！）**：R2 时在 `next.config.js` 的 redirects 里加了 `{ source: '/coaster', destination: '/', permanent: false }`（当时为了不让用户跳出城市游戏）。游乐场要见人，**第一步就是删掉这条重定向**。
+
+### 工作清单（建议顺序）
+1. 删 `next.config.js` 里 `/coaster` 重定向，确认 `powpowcity.powpow.online/coaster` 能打开。
+2. 品牌化三件套照抄城市版（第 2 节）：`src/app/coaster/layout.tsx` 的 metadata 改「泡泡游乐场 — PowPow 过山车公园」之类、logo、返回泡泡按钮、红色主题。注意 coaster 可能有自己的样式文件/组件级 className，先 grep `coaster` 相关样式再统一动 globals.css。
+3. 文案 T 化 + zh.json 翻译（hashSource 流程见第 4 节，改 `<T>` 文案哈希会变，必须同步更新词典）。
+4. 多人房间：CoasterShareModal 邀请链接是 `window.location.origin/coaster/coop/{code}`，与城市版的 `/coop/{code}` 天然隔离，可共用同一张 `game_rooms` 表。
+5. PowPow 主站活动卡片：campaign 页新增「泡泡游乐场」卡片（主站仓库 D:\github_powpow **只读**，单独 commit，参考 4ded9c9 的做法）。
+
+---
+
+## 10. 下一个游戏项目的复用建议（Playbook）
 
 1. **fork 上游 → Vercel 新建项目（连 fork 的 main）→ Cloudflare 加 CNAME（先灰云签证书再橙云）**。
 2. 环境变量直接在 Vercel 配；Supabase 沿用 PowPow 实例，一个游戏一张表 + 公开 RLS 即可上线。
