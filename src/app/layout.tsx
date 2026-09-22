@@ -28,7 +28,7 @@ const zcoolTitle = ZCOOL_QingKe_HuangYou({
   preload: false
 });
 
-export const metadata: Metadata = {
+const zhMetadata: Metadata = {
   metadataBase: new URL('https://powpowcity.powpow.online'),
   title: {
     default: '泡泡城市 — PowPow 城市建造',
@@ -63,6 +63,47 @@ export const metadata: Metadata = {
     telephone: false
   }
 };
+
+const enMetadata: Metadata = {
+  metadataBase: new URL('https://powpowcity.powpow.online'),
+  title: {
+    default: 'PowPow City — City Builder',
+    template: '%s — PowPow City',
+  },
+  description: 'A richly detailed isometric city builder by PowPow. Zone residential, commercial, and industrial districts, lay roads, power grids, and water pipes, and watch your metropolis rise.',
+  openGraph: {
+    title: 'PowPow City — City Builder',
+    description: 'Zone districts, lay roads and utilities, and build your metropolis. A richly detailed isometric city builder by PowPow.',
+    type: 'website',
+    siteName: 'PowPow City',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        type: 'image/png',
+        alt: 'PowPow City - Isometric city building game by PowPow'
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/opengraph-image.png'],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'PowPow City'
+  },
+  formatDetection: {
+    telephone: false
+  }
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return locale === 'zh' ? zhMetadata : enMetadata;
+}
 
 export const viewport: Viewport = {
   width: 'device-width',
