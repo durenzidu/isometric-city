@@ -1,7 +1,7 @@
 # 泡泡城市（PowPow City）项目交接文档
 
 > 本文档记录「泡泡城市」从 fork 到上线的完整过程、关键技术发现、部署配置与避坑指南，
-> 供下一个游戏/游乐场项目快速复用。最后更新：2026-09-22 晚（语言选择器加固 commit 40539d3 + 游乐场开工准备）。
+> 供下一个游戏/游乐场项目快速复用。最后更新：2026-09-22 深夜（游乐场全量上线 + 深层 UI 中文化，commit a608f95）。
 
 ---
 
@@ -172,22 +172,29 @@ npm run build    # = npm run compress-images && next build（sharp 处理图片�
 
 ---
 
-## 9. 明日待办（2026-09-23）：泡泡游乐场（IsoCoaster）⭐
+## 9. 泡泡游乐场（IsoCoaster）：✅ 已完成（2026-09-22 深夜）
 
-> 用户已确认：下一个定制目标是仓库内的过山车/游乐场子游戏（IsoCoaster）。
-> 代码克隆已备好，明天直接开工，不需要重新 clone。
+> 曾为「明日待办」，当日全部完成。线上地址：https://powpowcity.powpow.online/coaster
 
-### 现状（2026-09-22 已验证）
-- **代码完整在库**：`src/app/coaster/`（`page.tsx` 主页、`layout.tsx`、`coop/[roomCode]/page.tsx` 多人房间路由）+ `src/components/coaster/`（18 个组件文件，含 CoasterShareModal）。
-- **本地克隆就绪**：`D:\powpowcity\isometric-city`，已补全为**完整历史**（952 commits，非浅克隆，可任意切分支）；main = `40539d3`，与远端、线上部署完全同步；node_modules 已装好，可直接 `npm run dev` / `npm run build`。
-- **线上目前不可达（关键！）**：R2 时在 `next.config.js` 的 redirects 里加了 `{ source: '/coaster', destination: '/', permanent: false }`（当时为了不让用户跳出城市游戏）。游乐场要见人，**第一步就是删掉这条重定向**。
+### 已交付
+1. **删除 `/coaster` 重定向**，`/coaster` 已可直达（commit b3b12c4）。
+2. **品牌化**：layout metadata「泡泡游乐场 — PowPow 过山车公园」、白底黑字落地页、红色主题、返回泡泡按钮（`https://global.powpow.online/campaign`）、落地页独立语言选择按钮。
+3. **中文翻译全覆盖**（commit b3b12c4 + a608f95）：
+   - TopBar / CoasterMobileTopBar / CoasterShareModal / Game.tsx / CoasterCoopModal / 落地页。
+   - **深层 UI**（a608f95）：`coaster/Sidebar.tsx`（含天气组件、ExitDialog、悬浮子菜单、轨道工具）、`CommandMenu.tsx`（⌘K 搜索菜单）、`panels/Panels.tsx`（财务/设置面板）、`mobile/CoasterMobileToolbar.tsx`。
+   - 数据词条：TOOL_INFO 全部 227 组 name/description、WEATHER_DISPLAY 7 天气、COASTER_TYPE_STATS 车型名。词典 zh.json 从 359 条扩到 **883 条**。
+4. **踩坑记录（重要）**：
+   - `m(纯字符串)`/`msg()` 用 **ICU** hash，`<T>` JSX 文案用 **JSX** hash，同一英文两种 hash 不互通（如 'Invite Players' 两条都要）。
+   - **共享词条冲突**：'Water' 城市版已有「水」，过山车分类若拆词渲染会出「水 过山车」。解法：分类标签用完整复合词条（msg('Wooden Coaster') 等整词入典），不要拆 `{category} {m('coaster')}`。
+   - 共享词条 'Bulldoze' 由「推倒重建」覆盖为「拆除」（两游戏通用且更准确）。
+   - CommandMenu 的搜索 keywords 必须保持英文（索引用），翻译走独立 CATEGORY_T map 渲染。
+   - 带插值文案（'Remove all guests from the park ({n} guests)'）拆成两段分别 m()，避免带变量 hash。
+5. **主站 campaign 卡片**：主站仓库 D:\github_powpow 已加「泡泡游乐场」卡片（commit ec6bd21 已推送）；Vercel 生产分支已由用户调整为根目录构建，卡片已上线。
 
-### 工作清单（建议顺序）
-1. 删 `next.config.js` 里 `/coaster` 重定向，确认 `powpowcity.powpow.online/coaster` 能打开。
-2. 品牌化三件套照抄城市版（第 2 节）：`src/app/coaster/layout.tsx` 的 metadata 改「泡泡游乐场 — PowPow 过山车公园」之类、logo、返回泡泡按钮、红色主题。注意 coaster 可能有自己的样式文件/组件级 className，先 grep `coaster` 相关样式再统一动 globals.css。
-3. 文案 T 化 + zh.json 翻译（hashSource 流程见第 4 节，改 `<T>` 文案哈希会变，必须同步更新词典）。
-4. 多人房间：CoasterShareModal 邀请链接是 `window.location.origin/coaster/coop/{code}`，与城市版的 `/coop/{code}` 天然隔离，可共用同一张 `game_rooms` 表。
-5. PowPow 主站活动卡片：campaign 页新增「泡泡游乐场」卡片（主站仓库 D:\github_powpow **只读**，单独 commit，参考 4ded9c9 的做法）。
+### 遗留（低优先级）
+- CoasterCoopModal 内部复杂 JSX（多人加入失败等场景）已覆盖主要文案；如发现漏网英文，按第 4 节 hashSource 流程补。
+- og 分享图可出白底版与落地页统一。
+- lint 存在 19 个上游既有 error（react-hooks/set-state-in-effect，城市+游乐场两侧均有），非本次引入，以 build 通过为准。
 
 ---
 
