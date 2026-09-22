@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import { msg, useMessages } from 'gt-next';
 import { useCoaster } from '@/context/CoasterContext';
 import { Tool, TOOL_INFO } from '@/games/coaster/types';
 import { COASTER_TYPE_STATS, getCoasterCategory } from '@/games/coaster/types/tracks';
@@ -54,6 +55,33 @@ const QuickToolIcons: Partial<Record<Tool, React.ReactNode>> = {
 // =============================================================================
 // TOOL CATEGORIES
 // =============================================================================
+
+// Translated category labels for display
+const CATEGORY_T: Record<string, unknown> = {
+  paths: msg('Paths'),
+  terrain: msg('Terrain'),
+  trees: msg('Trees'),
+  flowers: msg('Flowers'),
+  furniture: msg('Furniture'),
+  fountains: msg('Fountains'),
+  food: msg('Food & Drink'),
+  shops: msg('Shops & Services'),
+  rides_small: msg('Small Rides'),
+  rides_large: msg('Large Rides'),
+  coasters_wooden: msg('Wooden Coasters'),
+  coasters_steel: msg('Steel Coasters'),
+  coasters_water: msg('Water Coasters'),
+  coasters_specialty: msg('Specialty Coasters'),
+  infrastructure: msg('Infrastructure'),
+};
+
+// Translatable coaster category labels (full compounds to avoid shared-word conflicts)
+const COASTER_CATEGORY_LABELS: Record<string, unknown> = {
+  wooden: msg('Wooden Coaster'),
+  steel: msg('Steel Coaster'),
+  water: msg('Water Coaster'),
+  specialty: msg('Specialty Coaster'),
+};
 
 // Submenu categories matching the sidebar
 const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
@@ -249,6 +277,7 @@ interface CoasterTrackToolsProps {
 function CoasterTrackToolsPanel({ onClose }: CoasterTrackToolsProps) {
   const { state, setTool, cancelCoasterBuild } = useCoaster();
   const { selectedTool, finances, buildingCoasterType } = state;
+  const m = useMessages();
   
   const trackTools: Tool[] = [
     'coaster_build', 'coaster_track', 'coaster_turn_left', 'coaster_turn_right',
@@ -268,10 +297,10 @@ function CoasterTrackToolsPanel({ onClose }: CoasterTrackToolsProps) {
           />
           <div>
             <div className="text-xs font-medium text-primary">
-              {COASTER_TYPE_STATS[buildingCoasterType]?.name ?? 'Custom Coaster'}
+              {m(COASTER_TYPE_STATS[buildingCoasterType]?.name ?? 'Custom Coaster')}
             </div>
             <div className="text-[10px] text-muted-foreground capitalize">
-              {getCoasterCategory(buildingCoasterType)} coaster
+              {m(COASTER_CATEGORY_LABELS[getCoasterCategory(buildingCoasterType)] as Parameters<typeof m>[0])}
             </div>
           </div>
         </div>
@@ -285,7 +314,7 @@ function CoasterTrackToolsPanel({ onClose }: CoasterTrackToolsProps) {
           }}
           className="h-6 px-2 text-xs text-muted-foreground hover:text-destructive"
         >
-          Cancel
+          {m('Cancel')}
         </Button>
       </div>
       
@@ -306,9 +335,9 @@ function CoasterTrackToolsPanel({ onClose }: CoasterTrackToolsProps) {
               className={`h-auto py-2 px-1 flex flex-col items-center gap-0.5 text-[10px] ${
                 isSelected ? 'bg-primary text-primary-foreground' : ''
               }`}
-              title={info.description}
+              title={m(info.description)}
             >
-              <span className="truncate w-full text-center">{info.name.replace('Track: ', '')}</span>
+              <span className="truncate w-full text-center">{m(info.name.replace('Track: ', ''))}</span>
               {info.cost > 0 && (
                 <span className={`text-[9px] ${isSelected ? 'opacity-80' : 'opacity-50'}`}>
                   ${info.cost}
@@ -335,6 +364,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
   const { selectedTool, finances, buildingCoasterType } = state;
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [showMenu, setShowMenu] = useState(false);
+  const m = useMessages();
 
   const handleCategoryClick = (category: string) => {
     if (expandedCategory === category) {
@@ -375,7 +405,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
           {selectedTool && TOOL_INFO[selectedTool] && !buildingCoasterType && (
             <div className="flex items-center justify-between px-4 py-1.5 border-b border-sidebar-border/50 bg-secondary/30 text-xs">
               <span className="text-foreground font-medium">
-                {TOOL_INFO[selectedTool].name}
+                {m(TOOL_INFO[selectedTool].name)}
               </span>
               {TOOL_INFO[selectedTool].cost > 0 && (
                 <span className={`font-mono ${finances.cash >= TOOL_INFO[selectedTool].cost ? 'text-green-400' : 'text-red-400'}`}>
@@ -470,7 +500,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
             {/* Park Management section at top */}
             <div className="p-3 border-b border-border flex-shrink-0">
               <div className="text-xs text-muted-foreground uppercase tracking-wider mb-2">
-                Park Management
+                {m('Park Management')}
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <Button
@@ -479,7 +509,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
                   className="h-10 w-full text-xs"
                   onClick={() => { onOpenPanel('finances'); setShowMenu(false); }}
                 >
-                  Finances
+                  {m('Finances')}
                 </Button>
                 <Button
                   variant="ghost"
@@ -487,7 +517,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
                   className="h-10 w-full text-xs"
                   onClick={() => { onOpenPanel('settings'); setShowMenu(false); }}
                 >
-                  Settings
+                  {m('Settings')}
                 </Button>
               </div>
             </div>
@@ -502,7 +532,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
                       className="w-full justify-start gap-3 h-12"
                       onClick={() => handleCategoryClick(category.key)}
                     >
-                      <span className="flex-1 text-left font-medium">{category.label}</span>
+                      <span className="flex-1 text-left font-medium">{m(CATEGORY_T[category.key] as Parameters<typeof m>[0])}</span>
                       <svg
                         className={`w-4 h-4 transition-transform ${expandedCategory === category.key ? 'rotate-180' : ''}`}
                         viewBox="0 0 24 24"
@@ -530,7 +560,7 @@ export function CoasterMobileToolbar({ onOpenPanel }: CoasterMobileToolbarProps)
                               disabled={!canAfford && info.cost > 0}
                               onClick={() => handleToolSelect(tool, true)}
                             >
-                              <span className="flex-1 text-left">{info.name}</span>
+                              <span className="flex-1 text-left">{m(info.name)}</span>
                               {info.cost > 0 && (
                                 <span className={`text-xs font-mono ${canAfford ? 'text-green-400' : 'text-red-400'}`}>
                                   ${info.cost}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { msg, useMessages } from 'gt-next';
 import { useCoaster } from '@/context/CoasterContext';
 import { useMultiplayerOptional } from '@/context/MultiplayerContext';
 import { Tool, TOOL_INFO } from '@/games/coaster/types';
@@ -26,6 +27,46 @@ import {
 } from '@/components/ui/tooltip';
 import { Users } from 'lucide-react';
 
+// UI labels for translation
+const UI_LABELS = {
+  tools: msg('Tools'),
+  buildings: msg('Buildings'),
+  exitToMenu: msg('Exit to Menu'),
+  exitPrompt: msg('Would you like to save your park before exiting?'),
+  exitWithoutSaving: msg('Exit Without Saving'),
+  saveAndExit: msg('Save & Exit'),
+  search: msg('Search (⌘K)'),
+  invitePlayers: msg('Invite Players'),
+  cancelCoasterBuild: msg('Cancel coaster build'),
+  customCoaster: msg('Custom Coaster'),
+  normalConditions: msg('Normal park conditions'),
+  forecast: msg('Forecast:'),
+  unknown: msg('Unknown'),
+  cost: msg('Cost'),
+  coaster: msg('coaster'),
+  brand: msg('PowPow Park'),
+};
+
+// Translatable weather effect descriptions
+const WEATHER_EFFECT_LABELS = {
+  fewerGuests: msg('Fewer guests arriving'),
+  moreGuests: msg('More guests arriving'),
+  leavingEarly: msg('Guests leaving early'),
+  outdoorLess: msg('Outdoor rides less popular'),
+  waterPopular: msg('Water rides popular'),
+  indoorPopular: msg('Indoor rides popular'),
+  drinkBoost: msg('Drink sales boosted'),
+  foodBoost: msg('Food sales boosted'),
+};
+
+// Translatable coaster category labels (full compounds to avoid shared-word conflicts)
+const COASTER_CATEGORY_LABELS: Record<string, unknown> = {
+  wooden: msg('Wooden Coaster'),
+  steel: msg('Steel Coaster'),
+  water: msg('Water Coaster'),
+  specialty: msg('Specialty Coaster'),
+};
+
 // =============================================================================
 // WEATHER DISPLAY COMPONENT
 // =============================================================================
@@ -38,17 +79,18 @@ const WeatherDisplay = React.memo(function WeatherDisplay({
   const current = weather.current as keyof typeof WEATHER_DISPLAY;
   const display = WEATHER_DISPLAY[current] || WEATHER_DISPLAY.sunny;
   const effects = WEATHER_EFFECTS[current] || WEATHER_EFFECTS.sunny;
+  const m = useMessages();
   
   // Build effect description
-  const effectDescriptions: string[] = [];
-  if (effects.guestSpawnMultiplier < 0.8) effectDescriptions.push('Fewer guests arriving');
-  if (effects.guestSpawnMultiplier > 1.2) effectDescriptions.push('More guests arriving');
-  if (effects.leaveChanceMultiplier > 1.5) effectDescriptions.push('Guests leaving early');
-  if (effects.outdoorRidePopularity < 0.5) effectDescriptions.push('Outdoor rides less popular');
-  if (effects.waterRidePopularity > 1.3) effectDescriptions.push('Water rides popular');
-  if (effects.indoorRidePopularity > 1.3) effectDescriptions.push('Indoor rides popular');
-  if (effects.drinkSalesMultiplier > 1.3) effectDescriptions.push('Drink sales boosted');
-  if (effects.foodSalesMultiplier > 1.2) effectDescriptions.push('Food sales boosted');
+  const effectDescriptions: unknown[] = [];
+  if (effects.guestSpawnMultiplier < 0.8) effectDescriptions.push(WEATHER_EFFECT_LABELS.fewerGuests);
+  if (effects.guestSpawnMultiplier > 1.2) effectDescriptions.push(WEATHER_EFFECT_LABELS.moreGuests);
+  if (effects.leaveChanceMultiplier > 1.5) effectDescriptions.push(WEATHER_EFFECT_LABELS.leavingEarly);
+  if (effects.outdoorRidePopularity < 0.5) effectDescriptions.push(WEATHER_EFFECT_LABELS.outdoorLess);
+  if (effects.waterRidePopularity > 1.3) effectDescriptions.push(WEATHER_EFFECT_LABELS.waterPopular);
+  if (effects.indoorRidePopularity > 1.3) effectDescriptions.push(WEATHER_EFFECT_LABELS.indoorPopular);
+  if (effects.drinkSalesMultiplier > 1.3) effectDescriptions.push(WEATHER_EFFECT_LABELS.drinkBoost);
+  if (effects.foodSalesMultiplier > 1.2) effectDescriptions.push(WEATHER_EFFECT_LABELS.foodBoost);
   
   return (
     <TooltipProvider>
@@ -58,7 +100,7 @@ const WeatherDisplay = React.memo(function WeatherDisplay({
             <span className="text-2xl">{display.icon}</span>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium" style={{ color: display.color }}>
-                {display.name}
+                {m(display.name)}
               </div>
               <div className="text-xs text-muted-foreground">
                 {Math.round(weather.temperature)}°C
@@ -69,7 +111,7 @@ const WeatherDisplay = React.memo(function WeatherDisplay({
               {weather.forecast.slice(0, 3).map((fc, i) => {
                 const fcDisplay = WEATHER_DISPLAY[fc as keyof typeof WEATHER_DISPLAY] || WEATHER_DISPLAY.sunny;
                 return (
-                  <span key={i} className="text-xs opacity-60" title={fcDisplay.name}>
+                  <span key={i} className="text-xs opacity-60" title={m(fcDisplay.name)}>
                     {fcDisplay.icon}
                   </span>
                 );
@@ -78,19 +120,19 @@ const WeatherDisplay = React.memo(function WeatherDisplay({
           </div>
         </TooltipTrigger>
         <TooltipContent side="right" className="max-w-xs">
-          <div className="text-sm font-medium mb-1">{display.name} - {Math.round(weather.temperature)}°C</div>
+          <div className="text-sm font-medium mb-1">{m(display.name)} - {Math.round(weather.temperature)}°C</div>
           {effectDescriptions.length > 0 ? (
             <ul className="text-xs text-muted-foreground space-y-0.5">
               {effectDescriptions.map((desc, i) => (
-                <li key={i}>• {desc}</li>
+                <li key={i}>• {m(desc as Parameters<typeof m>[0])}</li>
               ))}
             </ul>
           ) : (
-            <div className="text-xs text-muted-foreground">Normal park conditions</div>
+            <div className="text-xs text-muted-foreground">{m(UI_LABELS.normalConditions)}</div>
           )}
           <div className="text-xs text-muted-foreground mt-1 pt-1 border-t border-border">
-            Forecast: {weather.forecast.slice(0, 3).map(fc => 
-              WEATHER_DISPLAY[fc as keyof typeof WEATHER_DISPLAY]?.name || 'Unknown'
+            {m(UI_LABELS.forecast)} {weather.forecast.slice(0, 3).map(fc => 
+              m((WEATHER_DISPLAY[fc as keyof typeof WEATHER_DISPLAY]?.name || 'Unknown') as Parameters<typeof m>[0])
             ).join(' → ')}
           </div>
         </TooltipContent>
@@ -114,7 +156,7 @@ const HoverSubmenu = React.memo(function HoverSubmenu({
   onSelectTool,
   forceOpenUpward = false,
 }: {
-  label: string;
+  label: unknown;
   tools: Tool[];
   selectedTool: Tool;
   cash: number;
@@ -127,6 +169,7 @@ const HoverSubmenu = React.memo(function HoverSubmenu({
   const submenuRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastMousePos = useRef<{ x: number; y: number } | null>(null);
+  const m = useMessages();
   
   const hasSelectedTool = tools.includes(selectedTool);
   const SUBMENU_GAP = 12; // Gap between sidebar and submenu
@@ -230,7 +273,7 @@ const HoverSubmenu = React.memo(function HoverSubmenu({
           hasSelectedTool ? 'bg-primary text-primary-foreground' : ''
         } ${isOpen ? 'bg-muted/80' : ''}`}
       >
-        <span className="font-medium">{label}</span>
+        <span className="font-medium">{m(label as Parameters<typeof m>[0])}</span>
         <svg 
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
           fill="none" 
@@ -274,7 +317,7 @@ const HoverSubmenu = React.memo(function HoverSubmenu({
           onMouseLeave={handleSubmenuLeave}
         >
           <div className="px-3 py-2 border-b border-sidebar-border/50 bg-muted/30">
-            <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">{label}</span>
+            <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">{m(label as Parameters<typeof m>[0])}</span>
           </div>
           <div className="p-1.5 flex flex-col gap-0.5 max-h-48 overflow-y-auto">
             {tools.map(tool => {
@@ -292,9 +335,9 @@ const HoverSubmenu = React.memo(function HoverSubmenu({
                   className={`w-full justify-start gap-2 px-3 py-2 h-auto text-sm transition-all duration-150 ${
                     isSelected ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-muted/60'
                   }`}
-                  title={`${info.description} - Cost: $${info.cost.toLocaleString()}`}
+                  title={`${m(info.description)} - ${m(UI_LABELS.cost)}: $${info.cost.toLocaleString()}`}
                 >
-                  <span className="flex-1 text-left truncate">{info.name}</span>
+                  <span className="flex-1 text-left truncate">{m(info.name)}</span>
                   <span className={`text-xs ${isSelected ? 'opacity-80' : 'opacity-50'}`}>${info.cost.toLocaleString()}</span>
                 </Button>
               );
@@ -313,21 +356,21 @@ const HoverSubmenu = React.memo(function HoverSubmenu({
 // Direct tools shown inline (not in submenus)
 const DIRECT_TOOLS: Tool[] = ['select', 'bulldoze'];
 
-// Submenu categories with their tools
-const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
+// Submenu categories with their tools (labels are translation msg objects)
+const SUBMENU_CATEGORIES: { key: string; label: unknown; tools: Tool[] }[] = [
   {
     key: 'paths',
-    label: 'Paths',
+    label: msg('Paths'),
     tools: ['path', 'queue'],
   },
   {
     key: 'terrain',
-    label: 'Terrain',
+    label: msg('Terrain'),
     tools: ['zone_water', 'zone_land'],
   },
   {
     key: 'trees',
-    label: 'Trees',
+    label: msg('Trees'),
     tools: [
       'tree_oak', 'tree_maple', 'tree_pine', 'tree_palm', 'tree_cherry',
       'bush_hedge', 'bush_flowering', 'topiary_ball',
@@ -335,12 +378,12 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'flowers',
-    label: 'Flowers',
+    label: msg('Flowers'),
     tools: ['flowers_bed', 'flowers_planter', 'flowers_wild', 'ground_cover'],
   },
   {
     key: 'furniture',
-    label: 'Furniture',
+    label: msg('Furniture'),
     tools: [
       'bench_wooden', 'bench_metal', 'bench_ornate',
       'lamp_victorian', 'lamp_modern', 'lamp_pathway',
@@ -349,7 +392,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'fountains',
-    label: 'Fountains',
+    label: msg('Fountains'),
     tools: [
       'fountain_small_1', 'fountain_small_2', 'fountain_small_3',
       'fountain_medium_1', 'fountain_medium_2', 'fountain_medium_3',
@@ -360,7 +403,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'food',
-    label: 'Food & Drink',
+    label: msg('Food & Drink'),
     tools: [
       // American
       'food_hotdog', 'food_burger', 'food_fries', 'food_corndog', 'food_pretzel',
@@ -378,7 +421,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'shops',
-    label: 'Shops & Services',
+    label: msg('Shops & Services'),
     tools: [
       // Gift shops
       'shop_souvenir', 'shop_emporium', 'shop_photo', 'shop_ticket', 'shop_collectibles',
@@ -396,7 +439,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'rides_small',
-    label: 'Small Rides',
+    label: msg('Small Rides'),
     tools: [
       // Kiddie
       'ride_kiddie_coaster', 'ride_kiddie_train', 'ride_kiddie_planes', 'ride_kiddie_boats', 'ride_kiddie_cars',
@@ -414,7 +457,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'rides_large',
-    label: 'Large Rides',
+    label: msg('Large Rides'),
     tools: [
       // Ferris Wheels
       'ride_ferris_classic', 'ride_ferris_modern', 'ride_ferris_observation', 'ride_ferris_double', 'ride_ferris_led',
@@ -432,7 +475,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'coasters_wooden',
-    label: 'Wooden Coasters',
+    label: msg('Wooden Coasters'),
     tools: [
       'coaster_type_wooden_classic',
       'coaster_type_wooden_twister',
@@ -440,7 +483,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'coasters_steel',
-    label: 'Steel Coasters',
+    label: msg('Steel Coasters'),
     tools: [
       'coaster_type_steel_sit_down',
       'coaster_type_steel_standup',
@@ -457,14 +500,14 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'coasters_water',
-    label: 'Water Coasters',
+    label: msg('Water Coasters'),
     tools: [
       'coaster_type_water_coaster',
     ],
   },
   {
     key: 'coasters_specialty',
-    label: 'Specialty Coasters',
+    label: msg('Specialty Coasters'),
     tools: [
       'coaster_type_mine_train',
       'coaster_type_bobsled',
@@ -473,7 +516,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'coasters_track',
-    label: 'Coaster Track',
+    label: msg('Coaster Track'),
     tools: [
       'coaster_build',
       'coaster_track',
@@ -487,7 +530,7 @@ const SUBMENU_CATEGORIES: { key: string; label: string; tools: Tool[] }[] = [
   },
   {
     key: 'infrastructure',
-    label: 'Infrastructure',
+    label: msg('Infrastructure'),
     tools: ['park_entrance', 'staff_building'],
   },
 ];
@@ -507,13 +550,14 @@ function ExitDialog({
   onSaveAndExit: () => void;
   onExitWithoutSaving: () => void;
 }) {
+  const m = useMessages();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Exit to Menu</DialogTitle>
+          <DialogTitle>{m(UI_LABELS.exitToMenu)}</DialogTitle>
           <DialogDescription>
-            Would you like to save your park before exiting?
+            {m(UI_LABELS.exitPrompt)}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col sm:flex-row gap-2">
@@ -522,10 +566,10 @@ function ExitDialog({
             onClick={onExitWithoutSaving}
             className="w-full sm:w-auto"
           >
-            Exit Without Saving
+            {m(UI_LABELS.exitWithoutSaving)}
           </Button>
           <Button onClick={onSaveAndExit} className="w-full sm:w-auto">
-            Save & Exit
+            {m(UI_LABELS.saveAndExit)}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -594,6 +638,7 @@ export function Sidebar({ onExit }: SidebarProps) {
   const [showShareModal, setShowShareModal] = useState(false);
   const multiplayer = useMultiplayerOptional();
   const hasShownShareModalRef = useRef(false);
+  const m = useMessages();
   
   const handleSaveAndExit = useCallback(() => {
     saveGame();
@@ -633,14 +678,14 @@ export function Sidebar({ onExit }: SidebarProps) {
       <div className="px-4 py-4 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
           <span className="text-sidebar-foreground font-bold tracking-tight">
-            ISOCOASTER
+            {m(UI_LABELS.brand)}
           </span>
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
               onClick={openCoasterCommandMenu}
-              title="Search (⌘K)"
+              title={m(UI_LABELS.search)}
               className="h-7 w-7 text-muted-foreground hover:text-sidebar-foreground"
             >
               <svg 
@@ -657,7 +702,7 @@ export function Sidebar({ onExit }: SidebarProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowShareModal(true)}
-                title="Invite Players"
+                title={m(UI_LABELS.invitePlayers)}
                 className="h-7 w-7 text-muted-foreground hover:text-sidebar-foreground"
               >
                 <Users className="w-4 h-4" />
@@ -668,7 +713,7 @@ export function Sidebar({ onExit }: SidebarProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowExitDialog(true)}
-                title="Exit to Menu"
+                title={m(UI_LABELS.exitToMenu)}
                 className="h-7 w-7 text-muted-foreground hover:text-sidebar-foreground"
               >
                 <svg
@@ -706,10 +751,10 @@ export function Sidebar({ onExit }: SidebarProps) {
             />
             <div className="flex-1 min-w-0">
               <div className="text-xs font-medium text-primary truncate">
-                {COASTER_TYPE_STATS[buildingCoasterType]?.name ?? 'Custom Coaster'}
+                {m(COASTER_TYPE_STATS[buildingCoasterType]?.name ?? 'Custom Coaster')}
               </div>
               <div className="text-[10px] text-muted-foreground capitalize">
-                {getCoasterCategory(buildingCoasterType)} coaster
+                {m(COASTER_CATEGORY_LABELS[getCoasterCategory(buildingCoasterType)] as Parameters<typeof m>[0])}
               </div>
             </div>
             <Button
@@ -720,7 +765,7 @@ export function Sidebar({ onExit }: SidebarProps) {
                 setTool('select');
               }}
               className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
-              title="Cancel coaster build"
+              title={m(UI_LABELS.cancelCoasterBuild)}
             >
               ✕
             </Button>
@@ -743,9 +788,9 @@ export function Sidebar({ onExit }: SidebarProps) {
                   className={`w-full justify-start gap-2 px-3 py-1.5 h-auto text-xs ${
                     isSelected ? 'bg-primary text-primary-foreground' : ''
                   }`}
-                  title={info.description}
+                  title={m(info.description)}
                 >
-                  <span className="flex-1 text-left">{info.name}</span>
+                  <span className="flex-1 text-left">{m(info.name)}</span>
                   {info.cost > 0 && (
                     <span className={`text-[10px] ${isSelected ? 'opacity-80' : 'opacity-50'}`}>
                       ${info.cost}
@@ -762,14 +807,14 @@ export function Sidebar({ onExit }: SidebarProps) {
       <ScrollArea className="flex-1 py-2">
         {/* Section: TOOLS (direct buttons) */}
         <div className="px-3 py-1.5">
-          <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">Tools</span>
+          <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">{m(UI_LABELS.tools)}</span>
         </div>
         <div className="px-2 flex flex-col gap-0.5 mb-2">
           {DIRECT_TOOLS.map(tool => {
             const info = TOOL_INFO[tool];
             if (!info) return null;
             const isSelected = selectedTool === tool;
-            
+
             return (
               <Button
                 key={tool}
@@ -778,9 +823,9 @@ export function Sidebar({ onExit }: SidebarProps) {
                 className={`w-full justify-start gap-2 px-3 py-2 h-auto text-sm ${
                   isSelected ? 'bg-primary text-primary-foreground' : ''
                 }`}
-                title={info.description}
+                title={m(info.description)}
               >
-                <span className="flex-1 text-left">{info.name}</span>
+                <span className="flex-1 text-left">{m(info.name)}</span>
                 {info.cost > 0 && (
                   <span className={`text-xs ${isSelected ? 'opacity-80' : 'opacity-50'}`}>
                     ${info.cost}
@@ -793,7 +838,7 @@ export function Sidebar({ onExit }: SidebarProps) {
         
         {/* Section: BUILDINGS (hover submenus) */}
         <div className="px-3 py-1.5 mt-2">
-          <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">Buildings</span>
+          <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">{m(UI_LABELS.buildings)}</span>
         </div>
         <div className="px-2 flex flex-col gap-0.5">
           {SUBMENU_CATEGORIES.map((category, index) => (
