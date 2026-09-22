@@ -17,6 +17,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Users } from 'lucide-react';
+import { msg, useMessages } from 'gt-next';
+import { LanguageSelector } from '@/components/ui/LanguageSelector';
 
 // =============================================================================
 // ICONS
@@ -59,16 +61,15 @@ function CloseIcon({ size = 12 }: { size?: number }) {
 // =============================================================================
 
 const UI_LABELS = {
-  cash: 'Cash',
-  guests: 'Guests',
-  rating: 'Rating',
-  ticket: 'Ticket',
-  ticketPrice: 'Ticket Price',
-  exitToMainMenu: 'Exit to Main Menu',
-  exitDialogTitle: 'Exit to Main Menu',
-  exitDialogDescription: 'Would you like to save your park before exiting?',
-  exitWithoutSaving: 'Exit Without Saving',
-  saveAndExit: 'Save & Exit',
+  cash: msg('Cash'),
+  guests: msg('Guests'),
+  rating: msg('Rating'),
+  ticket: msg('Ticket'),
+  ticketPrice: msg('Ticket Price'),
+  exitDialogTitle: msg('Exit to Main Menu'),
+  exitDialogDescription: msg('Would you like to save your park before exiting?'),
+  exitWithoutSaving: msg('Exit Without Saving'),
+  saveAndExit: msg('Save & Exit'),
 };
 
 // =============================================================================
@@ -114,6 +115,7 @@ export function CoasterMobileTopBar({
 }: CoasterMobileTopBarProps) {
   const { state, setSpeed, setParkSettings, saveGame } = useCoaster();
   const { settings, stats, finances, year, month, day, hour, minute, speed, weather } = state;
+  const m = useMessages();
   const [showDetails, setShowDetails] = useState(false);
   const [showExitDialog, setShowExitDialog] = useState(false);
   const [showTicketSlider, setShowTicketSlider] = useState(false);
@@ -164,13 +166,13 @@ export function CoasterMobileTopBar({
               <span className={`text-xs font-mono font-semibold ${finances.cash < 0 ? 'text-red-500' : finances.cash < 1000 ? 'text-amber-500' : 'text-green-500'}`}>
                 ${finances.cash >= 1000000 ? `${(finances.cash / 1000000).toFixed(1)}M` : finances.cash >= 1000 ? `${(finances.cash / 1000).toFixed(0)}k` : finances.cash.toLocaleString()}
               </span>
-              <span className="text-[9px] text-muted-foreground">{UI_LABELS.cash}</span>
+              <span className="text-[9px] text-muted-foreground">{String(m(UI_LABELS.cash))}</span>
             </div>
             <div className="flex flex-col items-start">
               <span className="text-xs font-mono font-semibold text-blue-400">
                 {stats.guestsInPark}
               </span>
-              <span className="text-[9px] text-muted-foreground">{UI_LABELS.guests}</span>
+              <span className="text-[9px] text-muted-foreground">{String(m(UI_LABELS.guests))}</span>
             </div>
           </button>
 
@@ -222,15 +224,40 @@ export function CoasterMobileTopBar({
               </button>
             </div>
 
-            {onShare && (
-              <button
-                onClick={onShare}
-                className="h-6 w-6 p-0 m-0 flex items-center justify-center text-muted-foreground hover:text-foreground"
-                title="Invite Players"
+            {/* Language selector, Back to PowPow, Share, and Exit button group */}
+            <div className="flex items-center -space-x-0.5">
+              <LanguageSelector useDrawer iconSize={12} />
+
+              <a
+                href="https://global.powpow.online/campaign"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-6 w-4 p-0 m-0 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                title="返回泡泡"
               >
-                <Users className="w-3.5 h-3.5" />
-              </button>
-            )}
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              </a>
+
+              {onShare && (
+                <button
+                  onClick={onShare}
+                  className="h-6 w-6 p-0 m-0 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                  title="Invite Players"
+                >
+                  <Users className="w-3.5 h-3.5" />
+                </button>
+              )}
             {/* Exit button */}
             {onExit && (
               <button
@@ -248,6 +275,7 @@ export function CoasterMobileTopBar({
                 </svg>
               </button>
             )}
+            </div>
           </div>
         </div>
 
@@ -255,7 +283,7 @@ export function CoasterMobileTopBar({
         <div className="flex items-center justify-between px-3 py-1 border-t border-sidebar-border/50 bg-secondary/30">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
-              <span className="text-[9px] text-muted-foreground">{UI_LABELS.rating}</span>
+              <span className="text-[9px] text-muted-foreground">{String(m(UI_LABELS.rating))}</span>
               <span className={`text-[10px] font-mono font-semibold ${
                 stats.parkRating >= 700 ? 'text-green-400' : 
                 stats.parkRating >= 400 ? 'text-amber-400' : 'text-red-400'
@@ -273,7 +301,7 @@ export function CoasterMobileTopBar({
               }
             }}
           >
-            <span className="text-[9px] text-muted-foreground">{UI_LABELS.ticket}</span>
+            <span className="text-[9px] text-muted-foreground">{String(m(UI_LABELS.ticket))}</span>
             <span className="text-[10px] font-mono text-green-400">${settings.entranceFee}</span>
           </button>
 
@@ -285,7 +313,7 @@ export function CoasterMobileTopBar({
         {/* Ticket Price Slider Row */}
         {showTicketSlider && !selectedTile && (
           <div className="border-t border-sidebar-border/50 bg-secondary/30 px-3 py-0.5 flex items-center gap-2 text-[10px]">
-            <span className="text-muted-foreground whitespace-nowrap">{UI_LABELS.ticketPrice}</span>
+            <span className="text-muted-foreground whitespace-nowrap">{String(m(UI_LABELS.ticketPrice))}</span>
             <Slider
               value={[settings.entranceFee]}
               onValueChange={(value) => setParkSettings({ entranceFee: value[0] })}
@@ -368,19 +396,19 @@ export function CoasterMobileTopBar({
             <div className="p-4 grid grid-cols-4 gap-3">
               <StatItem
                 icon={<span className="text-green-400">$</span>}
-                label={UI_LABELS.cash}
+                label={String(m(UI_LABELS.cash))}
                 value={finances.cash}
                 color={finances.cash < 0 ? 'text-red-500' : 'text-green-500'}
               />
               <StatItem
                 icon={<span className="text-blue-400">👤</span>}
-                label={UI_LABELS.guests}
+                label={String(m(UI_LABELS.guests))}
                 value={stats.guestsInPark}
                 color="text-blue-400"
               />
               <StatItem
                 icon={<span className="text-yellow-400">⭐</span>}
-                label={UI_LABELS.rating}
+                label={String(m(UI_LABELS.rating))}
                 value={stats.parkRating}
                 color={stats.parkRating >= 700 ? 'text-green-400' : stats.parkRating >= 400 ? 'text-amber-400' : 'text-red-400'}
               />
@@ -417,7 +445,7 @@ export function CoasterMobileTopBar({
             {/* Ticket price slider */}
             <div className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">{UI_LABELS.ticketPrice}</span>
+                <span className="text-sm text-muted-foreground">{String(m(UI_LABELS.ticketPrice))}</span>
                 <span className="text-sm font-mono text-foreground">${settings.entranceFee}</span>
               </div>
               <Slider
@@ -441,9 +469,9 @@ export function CoasterMobileTopBar({
       <Dialog open={showExitDialog} onOpenChange={setShowExitDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{UI_LABELS.exitDialogTitle}</DialogTitle>
+            <DialogTitle>{String(m(UI_LABELS.exitDialogTitle))}</DialogTitle>
             <DialogDescription>
-              {UI_LABELS.exitDialogDescription}
+              {String(m(UI_LABELS.exitDialogDescription))}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2">
@@ -452,13 +480,13 @@ export function CoasterMobileTopBar({
               onClick={handleExitWithoutSaving}
               className="w-full sm:w-auto"
             >
-              {UI_LABELS.exitWithoutSaving}
+              {String(m(UI_LABELS.exitWithoutSaving))}
             </Button>
             <Button
               onClick={handleSaveAndExit}
               className="w-full sm:w-auto"
             >
-              {UI_LABELS.saveAndExit}
+              {String(m(UI_LABELS.saveAndExit))}
             </Button>
           </DialogFooter>
         </DialogContent>

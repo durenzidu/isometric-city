@@ -6,7 +6,6 @@ const nextConfig = {
   reactCompiler: true,
   async redirects() {
     return [
-      { source: '/coaster', destination: '/', permanent: false },
       { source: '/thumbnail', destination: '/', permanent: false },
     ];
   },

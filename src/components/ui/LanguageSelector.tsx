@@ -75,6 +75,8 @@ interface LanguageSelectorProps {
   iconSize?: number;
   /** Use drawer style instead of dropdown (for mobile) */
   useDrawer?: boolean;
+  /** Always show the current language name (for standalone buttons) */
+  showName?: boolean;
 }
 
 export function LanguageSelector({ 
@@ -83,6 +85,7 @@ export function LanguageSelector({
   variant = 'ghost',
   iconSize = 16,
   useDrawer = false,
+  showName = false,
 }: LanguageSelectorProps) {
   const locale = useLocale();
   const setLocale = useSetLocale();
@@ -160,7 +163,7 @@ export function LanguageSelector({
         ) : (
           <Button variant={variant} size="sm" className={`gap-2 ${className}`}>
             <GlobeIcon size={iconSize} />
-            <span className="text-xs hidden xl:inline">{currentLanguage.name}</span>
+            <span className={showName ? 'text-sm font-light tracking-wide' : 'text-xs hidden xl:inline'}>{currentLanguage.name}</span>
           </Button>
         )}
       </DropdownMenuTrigger>

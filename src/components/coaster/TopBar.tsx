@@ -1,9 +1,22 @@
 'use client';
 
 import React from 'react';
+import { msg, useMessages, T } from 'gt-next';
 import { useCoaster } from '@/context/CoasterContext';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { LanguageSelector } from '@/components/ui/LanguageSelector';
+import { Users } from 'lucide-react';
+
+// Translatable UI labels
+const UI_LABELS = {
+  cash: msg('Cash'),
+  guests: msg('Guests'),
+  rating: msg('Rating'),
+  ticket: msg('Ticket'),
+  finances: msg('Finances'),
+  settings: msg('Settings'),
+};
 
 // =============================================================================
 // SPEED ICONS
@@ -46,9 +59,10 @@ function SuperFastIcon() {
 // TOPBAR COMPONENT
 // =============================================================================
 
-export function TopBar() {
+export function TopBar({ onInvite }: { onInvite?: () => void }) {
   const { state, setSpeed, setActivePanel, setParkSettings } = useCoaster();
   const { settings, stats, finances, year, month, day, hour, minute, speed } = state;
+  const m = useMessages();
   
   // Calculate demand based on ticket price
   const ticketPrice = settings.entranceFee;
@@ -122,19 +136,19 @@ export function TopBar() {
         {/* Money */}
         <div className="flex flex-col items-center">
           <span className="text-green-400 font-medium">${finances.cash.toLocaleString()}</span>
-          <span className="text-white/40 text-xs">Cash</span>
+          <span className="text-white/40 text-xs">{String(m(UI_LABELS.cash))}</span>
         </div>
         
         {/* Guests */}
         <div className="flex flex-col items-center">
           <span className="text-blue-400 font-medium">{stats.guestsInPark}</span>
-          <span className="text-white/40 text-xs">Guests</span>
+          <span className="text-white/40 text-xs">{String(m(UI_LABELS.guests))}</span>
         </div>
         
         {/* Park Rating */}
         <div className="flex flex-col items-center">
           <span className="text-yellow-400 font-medium">{stats.parkRating}</span>
-          <span className="text-white/40 text-xs">Rating</span>
+          <span className="text-white/40 text-xs">{String(m(UI_LABELS.rating))}</span>
         </div>
       </div>
       
@@ -143,7 +157,7 @@ export function TopBar() {
       
       {/* Ticket Price Slider - compact */}
       <div className="flex items-center gap-2">
-        <span className="text-white/70 text-xs">Ticket</span>
+        <span className="text-white/70 text-xs">{String(m(UI_LABELS.ticket))}</span>
         <Slider
           value={[ticketPrice]}
           onValueChange={(value) => setParkSettings({ entranceFee: value[0] })}
@@ -158,6 +172,30 @@ export function TopBar() {
       {/* Spacer */}
       <div className="flex-1" />
       
+      {/* Invite friends */}
+      {onInvite && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 text-primary hover:text-primary"
+          onClick={onInvite}
+          title="Invite Friends"
+        >
+          <Users className="w-3.5 h-3.5" />
+          <span className="hidden xl:inline">
+            <T>Invite Friends</T>
+          </span>
+        </Button>
+      )}
+
+      <Button asChild variant="ghost" size="sm" className="gap-1.5">
+        <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
+          <T>Back to PowPow</T>
+        </a>
+      </Button>
+
+      <LanguageSelector iconOnly={false} variant="ghost" iconSize={14} />
+
       {/* Panel buttons */}
       <div className="flex items-center gap-2">
         <Button
@@ -165,14 +203,14 @@ export function TopBar() {
           size="sm"
           onClick={() => setActivePanel(state.activePanel === 'finances' ? 'none' : 'finances')}
         >
-          Finances
+          {String(m(UI_LABELS.finances))}
         </Button>
         <Button
           variant={state.activePanel === 'settings' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => setActivePanel(state.activePanel === 'settings' ? 'none' : 'settings')}
         >
-          Settings
+          {String(m(UI_LABELS.settings))}
         </Button>
       </div>
     </div>

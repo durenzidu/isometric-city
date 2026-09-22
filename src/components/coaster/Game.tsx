@@ -16,6 +16,7 @@ import { CoasterCommandMenu } from '@/components/coaster/CommandMenu';
 import { CoasterMobileTopBar, CoasterMobileToolbar } from './mobile';
 import { CoasterShareModal } from '@/components/coaster/multiplayer/CoasterShareModal';
 import { Copy, Check } from 'lucide-react';
+import { T } from 'gt-next';
 
 interface GameProps {
   onExit?: () => void;
@@ -78,7 +79,7 @@ export default function CoasterGame({ onExit }: GameProps) {
   if (!isStateReady) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-950 via-indigo-900 to-purple-950">
-        <div className="text-white/60">Loading park...</div>
+        <div className="text-white/60"><T>Loading park...</T></div>
       </div>
     );
   }
@@ -169,7 +170,14 @@ export default function CoasterGame({ onExit }: GameProps) {
         {/* Main content */}
         <div className="flex-1 flex flex-col ml-56">
           {/* Top bar */}
-          <TopBar />
+          <TopBar onInvite={multiplayer ? () => setShowShareModal(true) : undefined} />
+
+          {multiplayer && (
+            <CoasterShareModal
+              open={showShareModal}
+              onOpenChange={setShowShareModal}
+            />
+          )}
           
           {/* Canvas area */}
           <div className="flex-1 relative overflow-visible">

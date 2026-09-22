@@ -1,38 +1,38 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://iso-coaster.com'),
+  metadataBase: new URL('https://powpowcity.powpow.online'),
   title: {
-    default: 'ISOCOASTER — Theme Park Builder',
-    template: 'ISOCOASTER — %s',
-    absolute: 'ISOCOASTER — Theme Park Builder',
+    default: '泡泡游乐场 — PowPow 过山车公园',
+    template: '泡泡游乐场 — %s',
+    absolute: '泡泡游乐场 — PowPow 过山车公园',
   },
   description: 'Build the ultimate theme park with thrilling roller coasters, exciting rides, and happy guests!',
   openGraph: {
-    title: 'ISOCOASTER — Theme Park Builder',
+    title: '泡泡游乐场 — PowPow 过山车公园',
     description: 'Build the ultimate theme park with thrilling roller coasters, exciting rides, and happy guests!',
     type: 'website',
-    siteName: 'IsoCoaster',
+    siteName: 'PowPow Park',
     images: [
       {
         url: '/coaster/opengraph-image.png',
         width: 1200,
         height: 630,
         type: 'image/png',
-        alt: 'IsoCoaster - Theme park builder game screenshot'
+        alt: 'PowPow Park - Theme park builder game screenshot'
       }
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ISOCOASTER — Theme Park Builder',
+    title: '泡泡游乐场 — PowPow 过山车公园',
     description: 'Build the ultimate theme park with thrilling roller coasters, exciting rides, and happy guests!',
     images: ['/coaster/opengraph-image.png'],
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'IsoCoaster',
+    title: '泡泡游乐场',
   },
 };
 

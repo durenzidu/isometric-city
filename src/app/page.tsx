@@ -511,7 +511,6 @@ export default function HomePage() {
             >
               <T>Co-op</T>
             </Button>
-
             <Button
               onClick={async () => {
                 // Clear any room code from URL to prevent multiplayer conflicts
@@ -535,6 +534,12 @@ export default function HomePage() {
               <T>Load Example</T>
             </Button>
 
+            <LanguageSelector
+              variant="outline"
+              showName
+              className="w-full h-auto py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
+            />
+
             <Button
               asChild
               variant="outline"
@@ -544,28 +549,6 @@ export default function HomePage() {
                 <T>Back to PowPow</T>
               </a>
             </Button>
-
-            <div className="flex items-start justify-between w-full">
-              <div className="flex flex-col">
-                <a
-                  href="https://global.powpow.online"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
-                >
-                  PowPow
-                </a>
-                <a
-                  href="https://github.com/amilich/isometric-city"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
-                >
-                  Powered by IsoCity
-                </a>
-              </div>
-              <LanguageSelector variant="ghost" className="text-gray-400 hover:text-gray-700 hover:bg-black/5" />
-            </div>
           </div>
           
           {/* Saved Cities - scrollable area takes remaining space */}
@@ -589,6 +572,16 @@ export default function HomePage() {
               </div>
             </div>
           )}
+          
+          {/* Footer credit */}
+          <a
+            href="https://github.com/amilich/isometric-city"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full max-w-xs text-center py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200 flex-shrink-0"
+          >
+            Powered by IsoCity
+          </a>
           
           {/* Bottom spacer */}
           <div className="flex-shrink-0 h-2" />
@@ -662,6 +655,11 @@ export default function HomePage() {
               >
                 <T>Load Example</T>
               </Button>
+              <LanguageSelector
+                variant="outline"
+                showName
+                className="w-64 h-auto py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
+              />
               <Button
                 asChild
                 variant="outline"
@@ -671,27 +669,6 @@ export default function HomePage() {
                   <T>Back to PowPow</T>
                 </a>
               </Button>
-              <div className="flex items-start justify-between w-64">
-                <div className="flex flex-col">
-                  <a
-                    href="https://global.powpow.online"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
-                  >
-                    PowPow
-                  </a>
-                  <a
-                    href="https://github.com/amilich/isometric-city"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-left py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
-                  >
-                    Powered by IsoCity
-                  </a>
-                </div>
-                <LanguageSelector variant="ghost" className="text-gray-400 hover:text-gray-700 hover:bg-black/5" />
-              </div>
             </div>
             
             {/* Saved Cities */}
@@ -715,6 +692,16 @@ export default function HomePage() {
                 </div>
               </div>
             )}
+
+            {/* Footer credit */}
+            <a
+              href="https://github.com/amilich/isometric-city"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-64 text-center py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
+            >
+              Powered by IsoCity
+            </a>
           </div>
 
           {/* Right - Sprite Gallery */}
