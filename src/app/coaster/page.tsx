@@ -386,7 +386,7 @@ function CoasterPageContent() {
                     }
                     setShowGame(true);
                   }}
-                  className="w-full py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
+                  className="w-full h-auto py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
                 >
                   {hasSaved ? <T>Continue</T> : <T>New Park</T>}
                 </Button>
@@ -399,7 +399,7 @@ function CoasterPageContent() {
                       setShowGame(true);
                     }}
                     variant="outline"
-                    className="w-full py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
+                    className="w-full h-auto py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
                   >
                     <T>New Park</T>
                   </Button>
@@ -408,7 +408,7 @@ function CoasterPageContent() {
                 <Button 
                   onClick={() => setShowCoopModal(true)}
                   variant="outline"
-                  className="w-full py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
+                  className="w-full h-auto py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
                 >
                   <T>Co-op</T>
                 </Button>
@@ -428,7 +428,7 @@ function CoasterPageContent() {
                     }
                   }}
                   variant="outline"
-                  className="w-full py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
+                  className="w-full h-auto py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
                 >
                   <T>Load Example</T>
                 </Button>
@@ -442,7 +442,7 @@ function CoasterPageContent() {
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
+                  className="w-full h-auto py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
                 >
                   <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
                     <T>Back to PowPow</T>

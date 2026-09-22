@@ -499,7 +499,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-2 sm:gap-3 w-full max-w-xs flex-shrink-0">
             <Button 
               onClick={() => setShowGame(true)}
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
+              className="w-full h-auto py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
             >
               {hasSaved ? <T>Continue</T> : <T>New Game</T>}
             </Button>
@@ -507,7 +507,7 @@ export default function HomePage() {
             <Button
               onClick={() => setShowCoopModal(true)}
               variant="outline"
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
+              className="w-full h-auto py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
             >
               <T>Co-op</T>
             </Button>
@@ -529,7 +529,7 @@ export default function HomePage() {
                 setShowGame(true);
               }}
               variant="outline"
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
+              className="w-full h-auto py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
             >
               <T>Load Example</T>
             </Button>
@@ -543,7 +543,7 @@ export default function HomePage() {
             <Button
               asChild
               variant="outline"
-              className="w-full py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
+              className="w-full h-auto py-4 sm:py-6 text-lg sm:text-xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
             >
               <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
                 <T>Back to PowPow</T>
@@ -622,14 +622,14 @@ export default function HomePage() {
             <div className="flex flex-col gap-3">
               <Button 
                 onClick={() => setShowGame(true)}
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
+                className="w-64 h-auto py-8 text-2xl font-light tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded-none transition-all duration-300"
               >
                 {hasSaved ? <T>Continue</T> : <T>New Game</T>}
               </Button>
               <Button
                 onClick={() => setShowCoopModal(true)}
                 variant="outline"
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
+                className="w-64 h-auto py-8 text-2xl font-light tracking-wide bg-black/[0.03] hover:bg-black/[0.07] text-gray-700 hover:text-gray-900 border border-black/10 rounded-none transition-all duration-300"
               >
                 <T>Co-op</T>
               </Button>
@@ -651,7 +651,7 @@ export default function HomePage() {
                   setShowGame(true);
                 }}
                 variant="outline"
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
+                className="w-64 h-auto py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
               >
                 <T>Load Example</T>
               </Button>
@@ -663,7 +663,7 @@ export default function HomePage() {
               <Button
                 asChild
                 variant="outline"
-                className="w-64 py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
+                className="w-64 h-auto py-8 text-2xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
               >
                 <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
                   <T>Back to PowPow</T>
