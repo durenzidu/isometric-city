@@ -601,8 +601,8 @@ export default function HomePage() {
   // Desktop landing page
   return (
     <MultiplayerContextProvider>
-      <main className="min-h-screen bg-white flex items-center justify-center p-8">
-        <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-16 items-center">
+      <main className="h-[100dvh] bg-white overflow-y-auto flex flex-col p-8">
+        <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-16 items-center my-auto">
           
           {/* Left - Title and Start Button */}
           <div className="flex flex-col items-center lg:items-start justify-center space-y-12">
@@ -692,16 +692,6 @@ export default function HomePage() {
                 </div>
               </div>
             )}
-
-            {/* Footer credit */}
-            <a
-              href="https://github.com/amilich/isometric-city"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-64 text-center py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
-            >
-              Powered by IsoCity
-            </a>
           </div>
 
           {/* Right - Sprite Gallery */}
@@ -709,7 +699,17 @@ export default function HomePage() {
             <SpriteGallery count={16} />
           </div>
         </div>
-        
+
+        {/* Footer credit */}
+        <a
+          href="https://github.com/amilich/isometric-city"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 self-center text-center py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
+        >
+          Powered by IsoCity
+        </a>
+
         {/* Co-op Modal */}
         <CoopModal
           open={showCoopModal}

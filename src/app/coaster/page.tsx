@@ -356,8 +356,8 @@ function CoasterPageContent() {
       </main>
     ) : (
       <>
-        <main className="min-h-screen bg-white flex items-center justify-center p-4 sm:p-8 overflow-x-hidden">
-          <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+        <main className="h-[100dvh] bg-white overflow-y-auto flex flex-col p-4 sm:p-8">
+          <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-8 lg:gap-16 items-center my-auto">
             {/* Left - Title and Buttons */}
             <div className="flex flex-col items-center lg:items-start justify-center space-y-8 lg:space-y-12">
               <div className="flex flex-col items-center lg:items-start gap-4">
@@ -436,13 +436,13 @@ function CoasterPageContent() {
                 <LanguageSelector
                   variant="outline"
                   showName
-                  className="w-full h-auto py-4 sm:py-5 text-base sm:text-lg font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
+                  className="w-full h-auto py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-black/5 text-gray-500 hover:text-gray-800 border border-black/10 rounded-none transition-all duration-300"
                 />
 
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full py-4 sm:py-5 text-base sm:text-lg font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
+                  className="w-full py-6 sm:py-8 text-xl sm:text-2xl font-light tracking-wide bg-transparent hover:bg-primary/5 text-primary hover:text-primary border border-primary/30 rounded-none transition-all duration-300"
                 >
                   <a href="https://global.powpow.online/campaign" target="_blank" rel="noopener noreferrer">
                     <T>Back to PowPow</T>
@@ -478,16 +478,6 @@ function CoasterPageContent() {
                   </div>
                 </div>
               )}
-
-              {/* Footer credit */}
-              <a
-                href="https://github.com/amilich/isometric-city"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full max-w-64 text-center py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
-              >
-                Powered by IsoCoaster
-              </a>
             </div>
 
             {/* Right - Sprite Gallery */}
@@ -495,6 +485,16 @@ function CoasterPageContent() {
               <CoasterSpriteGallery count={16} />
             </div>
           </div>
+
+          {/* Footer credit */}
+          <a
+            href="https://github.com/amilich/isometric-city"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0 self-center text-center py-2 text-sm font-light tracking-wide text-gray-400 hover:text-gray-700 transition-colors duration-200"
+          >
+            Powered by IsoCoaster
+          </a>
         </main>
 
         <CoasterCoopModal
