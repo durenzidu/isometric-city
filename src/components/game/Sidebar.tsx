@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useCallback, useEffect, useMemo } from 'react';
-import { msg, useMessages } from 'gt-next';
+import { msg, useMessages, T } from 'gt-next';
 import { useGame } from '@/context/GameContext';
 import { Tool, TOOL_INFO } from '@/types/game';
 
@@ -567,7 +567,7 @@ export const Sidebar = React.memo(function Sidebar({ onExit }: { onExit?: () => 
     <div className="w-56 bg-sidebar border-r border-sidebar-border flex flex-col h-screen fixed left-0 top-0 z-40">
       <div className="px-4 py-4 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
-          <span className="text-sidebar-foreground font-bold tracking-tight">ISOCITY</span>
+          <span className="text-sidebar-foreground font-bold tracking-tight"><T>PowPow City</T></span>
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"

@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const code = roomCode.toUpperCase();
   
   const title = `Join co-op ${code}`;
-  const fullTitle = `ISOCITY — ${title}`;
+  const fullTitle = `PowPow City — ${title}`;
   const description = `You've been invited to build a city together! Join room ${code} to start playing.`;
 
   return {
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: fullTitle,
       description,
-      siteName: 'IsoCity',
+      siteName: 'PowPow City',
       images: ['/opengraph-image.png'],
     },
     twitter: {
